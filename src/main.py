@@ -1,13 +1,7 @@
-import os
+from threading import Thread
 import pandas as pd
 from itertools import groupby, product
-import _thread
 import time
-
-data_set_path = os.path.join(os.getcwd(), 'src/dataset.csv')
-data_set = pd.read_csv(data_set_path)
-
-del data_set['index']
 
 def allele(e):
   allele = []
@@ -28,15 +22,63 @@ def punnett(a, b):
   ):
     permutations.append(''.join(e))
 
-  print(permutations)
-
   return permutations
 
-try:
-  _thread.start_new_thread(punnett, ('AaBb', 'AaBb'))
-  _thread.start_new_thread(punnett, ('AaBb', 'AaBb'))
-except:
-  print("Error: unable to start thread")
+dataset = pd.read_csv('src/dataset.csv')
 
-while 1:
-  pass
+crossover_samples = dataset.sample(2)
+
+crossover_genotypes = []
+
+for sample in crossover_samples.itertuples():
+    crossover_genotypes.append(
+      sample.eyeColor 
+      + sample.hairColor
+      + sample.skinColor
+      + sample.dominantHand
+      + sample.earLobule
+      + sample.noseFormat
+      + sample.hairSwirl
+      + sample.widowBeak
+      + sample.dimples
+      + sample.ptc
+      + sample.thumb
+      + sample.earTip
+      # + sample.eyebrow
+      # + sample.freckles
+      # + sample.eyelash
+      # + sample.eyeFormat
+      # + sample.cerumen
+      # + sample.wisdowTeeth
+    )
+
+threads = []
+
+threads.append(Thread(target=punnett, args=tuple(crossover_genotypes)))
+threads.append(Thread(target=punnett, args=tuple(crossover_genotypes)))
+threads.append(Thread(target=punnett, args=tuple(crossover_genotypes)))
+
+start = time.time()
+
+for x in threads:
+  x.start()
+
+for x in threads:
+  x.join()
+
+end = time.time()
+
+duration = (end - start)
+
+print(duration)
+
+start = time.time()
+
+for x in range(1, 3):
+  punnett(crossover_genotypes[0], crossover_genotypes[1])
+
+end = time.time()
+
+duration = (end - start)
+
+print(duration)
