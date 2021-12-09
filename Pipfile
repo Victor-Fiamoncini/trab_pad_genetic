@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 pandas = "*"
 numpy = "*"
+cython = "*"
+pymp-pypi = "*"
 
 [dev-packages]
 
