@@ -110,11 +110,6 @@ if __name__ == '__main__':
 
   with Pool(10) as p:
     punnett(crossover_genotypes[0], crossover_genotypes[1])
-  # for process in processes:
-  #   process.fork()
-
-  # for process in processes:
-  #   process.join()
 
   end = time.time()
 
